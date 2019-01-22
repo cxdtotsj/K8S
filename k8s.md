@@ -2,7 +2,7 @@
 
 ## 思维导图
 
-原理图[原理图](https://github.com/cxdtotsj/K8S/blob/master/pic/%E6%80%9D%E7%BB%B4%E5%AF%BC%E5%9B%BE.png)
+![原理图](https://github.com/cxdtotsj/K8S/blob/master/pic/%E6%80%9D%E7%BB%B4%E5%AF%BC%E5%9B%BE.png)
 
 
 
