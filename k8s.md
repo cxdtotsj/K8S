@@ -31,7 +31,7 @@
     3. 提供资源配额控制入口功能（每个POD占用的CPU、内存等）
     4. 安全的访问控制机制
 
-    ![API Server工作原理]()
+    ![API Server工作原理](https://github.com/cxdtotsj/K8S/blob/master/pic/API%20Server%E5%8E%9F%E7%90%86%E5%9B%BE.jpg)
 
     在kubernetes集群中，API Server运行在Master节点上，默认开放两个端口，分别为本地端口8080 (非认证或授权的http请求通过该端口访问API Server)和安全端口6443 (该端口用于接收https请求并且用于token文件或者客户端证书及HTTP Basic的认证，用于基于策略的授权)，kubernetes默认为不启动https安全访问控制。
 
@@ -40,7 +40,7 @@
 
     - Kubelet与API Server
         
-        ![kubelet监听原理]()
+        ![kubelet监听原理](https://github.com/cxdtotsj/K8S/blob/master/pic/kubelet%E7%9B%91%E5%90%AC%E5%8E%9F%E7%90%86.png)
 
     - kube-controller-manager与API Server
 
@@ -56,4 +56,31 @@
 
     Controller Manager在Pod工作流中起着管理和控制整个集群的作用，主要对资源对象进行管理，当Node节点中运行的Pod对象或是Node自身发生意外或故障时，Controller Manager会及时发现并处理，以确保整个集群处于理想工作状态。
 
-    ![manager工作原理]()
+    ![manager工作原理](https://github.com/cxdtotsj/K8S/blob/master/pic/manager%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86.jpg)
+
+    - Replication Controller
+
+        Replication Controller称为副本控制器，在Pod工作流中主要用于保证集群中Replication Controller所关联的Pod副本数始终保持在预期值，比如若发生节点故障的情况导致Pod被意外杀死，Replication Controller会重新调度保证集群仍然运行指定副本数，另外还可通过调整Replication Controller中spec.replicas属性值来实现扩容或缩容。
+    
+    - Endpoint Controller
+
+        Endpoint用来表示kubernetes集群中Service对应的后端Pod副本的访问地址，Endpoint Controller则是用来生成和维护Endpoints对象的控制器，其主要负责监听Service和对应Pod副本变化。如果监测到Service被删除，则删除和该Service同名的Endpoints对象；如果监测到新的Service被创建或是被修改，则根据该Service信息获得相关的Pod列表，然后创建或更新对应的Endpoints对象；如果监测到Pod的事件，则更新它对应的Service的Endpoints对象。
+
+3. Scheduler
+
+    Scheduler在整个Pod工作流中负责调度Pod到具体的Node节点，Scheduler通过API Server监听Pod状态，如果有待调度的Pod，则根据Scheduler Controller中的预选策略和优选策略给各个预备Node节点打分排序，最后将Pod调度到分数最高的Node上，然后由Node中的Kubelet组件负责Pod的启停。当然如果部署的Pod指定了NodeName属性，Scheduler会根据NodeName属性值调度Pod到指定Node节点。
+    整个调度流程分为两步:
+    ![scheduler](https://github.com/cxdtotsj/K8S/blob/master/pic/scheduler.jpg)
+
+    - 第一步预选策略（Predicates）
+
+        预选策略的主要工作机制是遍历所有当前Kubernetes集群中的Node，按照具体的预选策略选出符合要求的Node列表；如果没有符合的Node节点，则该Pod会被暂时挂起，直到有Node节点能满足条件。通用的预选策略筛选规则有：PodFitsResources、PodFitsHostPorts、HostName、MatchNodeSelector。
+    
+    - 第二步优选策略（priorities）
+
+        有了第一步预选策略的筛选后，再根据优选策略给待选Node节点打分，最终选择一个分值最高的节点去部署Pod。Kubernetes用一组优先级函数处理每一个待选的主机。每一个优先级函数会返回一个0-10的分数，分数越高表示节点越适应需求，同时每一个函数也会对应一个表示权重的值。最终主机的得分用以下公式计算得出：
+        FinalScoreNode =（weight1 priorityFunc1）+（weight2 priorityFunc2）+ … +（weightn * priorityFuncn）
+
+4. Kubelet
+
+    简而言之，Kubelet在Pod工作流中是为保证它所在的节点Pod能够正常工作，核心为监听API Server，当发现节点的Pod配置发生变化则根据最新的配置执行相应的动作，保证Pod在理想的预期状态，其中对Pod进行启停更新操作用到的是容器运行时（Docker、Rocket、LXD）。另外Kubelet也负责Volume（CVI）和网络（CNI）的管理。
