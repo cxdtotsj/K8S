@@ -4,7 +4,7 @@
 
 ![原理图](https://github.com/cxdtotsj/K8S/blob/master/pic/%E6%80%9D%E7%BB%B4%E5%AF%BC%E5%9B%BE.png)
 
-
+![总体组织结构](https://github.com/cxdtotsj/K8S/blob/master/pic/K8S%E6%80%BB%E4%BD%93%E7%BB%84%E7%BB%87%E7%BB%93%E6%9E%84.png)
 
 ## 概述
 
