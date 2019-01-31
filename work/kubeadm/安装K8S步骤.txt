@@ -1,0 +1,4 @@
+1. 使用国内源，获取kubeadm、lubelet、kubectl，并可以指定版本
+2. 关闭swap
+3. kubeadm 1.11 ,对于docker版本为 18.06
+4. 下载docker hub上的镜像，并把标签改成 google的
