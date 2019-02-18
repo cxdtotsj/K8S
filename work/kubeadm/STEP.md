@@ -93,10 +93,24 @@ kubeadm init --config yaml文件
 kubeadm join 192.168.11.133:6443 --token aru0ap.1w4q2gsjtymx88eu --discovery-token-ca-cert-hash sha256:4f4127d4be421c17715594a0caebd74141c4ac53161ab72c9bcda73479a21125
 ```
 
-- 如果忘记token
+- 如果忘记token(24小时内)
 ```
 kubeadm token list
 ```
+
+- 如果已过期，则重新生成
+
+```
+kubeadm token create
+# aa78f6.8b4cafc8ed26c34f (token)
+
+openssl x509 -pubkey -in /etc/kubernetes/pki/ca.crt | openssl rsa -pubin -outform der 2>/dev/null | openssl dgst -sha256 -hex | sed 's/^.* //'
+# 0fd95a9bc67a7bf0ef42da968a0d55d92e52898ec37c971bd77ee501d845b538 (生成的CA编码值)
+
+kubeadm join 192.168.11.133:6443 --token aru0ap.1w4q2gsjtymx88eu --discovery-token-ca-cert-hash sha256:4f4127d4be421c17715594a0caebd74141c4ac53161ab72c9bcda73479a21125
+```
+
+
 
 ## 配置安全策略
 mkdir -p $HOME/.kube
