@@ -20,6 +20,6 @@ spec:
         volumeMounts:
         - mountPath: "/usr/share/nginx/html"
           name: nginx-vol
-        volumes:
-        - name: nginx-vol
-          emptyDir: {}
+      volumes:
+      - name: nginx-vol
+        emptyDir: {}
