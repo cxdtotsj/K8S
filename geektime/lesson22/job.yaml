@@ -1,0 +1,14 @@
+# Job的基本用法
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: pi
+spec:
+  template:
+    spec:
+      containers:
+        - name: pi
+          image: resouer/ubuntu-bc
+          command: ["sh", "-c", "echo 'scale=10000; 4*a(1)' | bc -l "]
+      restartPolicy: Never
+  backoffLimit: 4 # Job失败后，最大的重启数，默认为6
