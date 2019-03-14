@@ -1,0 +1,16 @@
+# Job 并行运行策略
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: pi
+spec:
+  parallelism: 2  # 最大并行运行数(同时运行2个pod)
+  completions: 4  # 最小完成数(运行4次成功的pod)
+  template:
+    spec:
+      containers:
+        - name: pi
+          image: resouer/ubuntu-bc
+          command: ["sh", "-c", "echo 'scale=10000; 4*a(1)' | bc -l "]
+      restartPolicy: Never
+  backoffLimit: 4 # Job失败后，最大的重启数，默认为6
