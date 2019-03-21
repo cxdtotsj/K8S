@@ -20,9 +20,9 @@
     # 第一种方法:
     # (1) 安装成 agent
     # 默认为 containerd
-    curl -sfL https://get.k3s.io | K3S_URL=https://${master_ip}:6443 K3S_TOKEN=${mater token} sh -
+    curl -sfL https://get.k3s.io | K3S_URL=https://${master_ip}:6443 K3S_TOKEN=${master token} sh -
     # 建议采用 docker 的方式
-    curl -sfL https://get.k3s.io | K3S_URL=https://${master_ip}:6443 K3S_TOKEN=${mater token} sh -s - --docker
+    curl -sfL https://get.k3s.io | K3S_URL=https://${master_ip}:6443 K3S_TOKEN=${master token} sh -s - --docker
     # (2) 查看 systemd
     systemctl status k3s-agent
     # (3) 打开 .service 地址，查看 env, 能看到有参数变量
@@ -72,7 +72,7 @@
     sudo chomd +x ./k3s
 
     # 添加 node 至 master 集群
-    sudo ./k3s agent --server https://${master_ip}:6443 --token ${mater token}
+    sudo ./k3s agent --server https://${master_ip}:6443 --token ${master token}
 
     ```
 
